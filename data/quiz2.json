@@ -1,0 +1,82 @@
+[
+  {
+    "type": "fill-in-blank",
+    "question": "Excelにおいて、転置行列は [___] 、行列の積は [___] 、逆行列は [___] 、行列式を求めるために利用すべき関数は [___] である。",
+    "answers": [
+      "TRANSPOSE関数",
+      "MMULT関数",
+      "MINVERSE関数",
+      "MDETERM関数"
+    ],
+    "explanation": "Excelにおいて、転置行列はTRANSPOSE関数を使用して求めます。行列の積はMMULT関数を使用し、逆行列はMINVERSE関数を使用します。行列式を求めるためにはMDETERM関数を使用します。これらの関数は、行列の演算を効率的に行うために利用されます。"
+  },
+  {
+    "type": "simple",
+    "question": "「マクロ/VBA はWordとExcelの固有機能であり、PowerPointでは利用できない」は「正しい」か「正しくない」か答えよ。",
+    "answers": [
+      "正しくない"
+    ],
+    "explanation": "「マクロ/VBA」はWord、Excel、PowerPointのすべてで利用可能です。したがって、「WordとExcelの固有機能であり、PowerPointでは利用できない」という説明は正しくありません。VBAはMicrosoft Office製品全般で使用できるプログラミング言語です。"
+  },
+  {
+    "type": "simple",
+    "question": "「Excelファイルに記述したマクロ/VBA は、そのファイルに含まれるシートやセルに対してのみ操作や処理が可能となっている。別のExcelファイルのシートやセルに対する操作や処理はできない」は「正しい」か「正しくない」か答えよ。",
+    "answers": [
+      "正しくない"
+    ],
+    "explanation": "「Excelファイルに記述したマクロ/VBA」は、他のExcelファイルのシートやセルに対しても操作や処理が可能です。VBAを使用することで、異なるファイル間でデータの読み書きや操作を行うことができます。したがって、「そのファイルに含まれるシートやセルに対してのみ操作や処理が可能」という説明は正しくありません。"
+  },
+  {
+    "type": "simple",
+    "question": "Microsoft Excelにおける「Excelマクロ有効ブック」の拡張子を答えよ。",
+    "answers": [
+      "xlsm"
+    ],
+    "explanation": "Microsoft Excelにおける「Excelマクロ有効ブック」の拡張子は「xlsm」です。この形式は、マクロを含むExcelファイルを保存するために使用されます。通常のExcelファイル（拡張子が「xlsx」）とは異なり、マクロを実行できる機能が含まれています。"
+  },
+  {
+    "type": "simple",
+    "question": "VBAにおいて '(シングルクォーテーション/アポストロフィ)' から開始される行はコメントとして扱われる。括弧にあてはまる語を答えよ。",
+    "answers": [
+      "シングルクォーテーション",
+      "アポストロフィ"
+    ],
+    "explanation": "VBAでは、行の先頭にシングルクォーテーション（'）またはアポストロフィを記述すると、その行はコメントとして扱われ、プログラムの実行時には無視されます。"
+  },
+  {
+    "type": "simple",
+    "question": "ExcelにおいてVBAエディタを起動するためのショートカットキーを答えよ。",
+    "answers": [
+      "Alt+F11",
+      "AltF11"
+    ],
+    "explanation": "ExcelにおいてVBAエディタを起動するためのショートカットキーは「Alt+F11」です。このキーを押すことで、VBAエディタが開き、マクロの編集や作成が可能になります。"
+  },
+  {
+    "type": "simple",
+    "question": "ExcelのVBAエディタがアクティブなとき、選択しているサブルーチンを実行するためのショートカットキーを答えよ。",
+    "answers": [
+      "F5"
+    ],
+    "explanation": "VBAエディタでサブルーチン（Subプロシージャ）内にカーソルがある状態でF5キーを押すと、そのサブルーチンが実行されます。"
+  },
+  {
+    "type": "simple",
+    "question": "ExcelのVBAエディタにおいて「Debug.Print \"AAAAA\"」のようなコードを実行したときに文字列「AAAAA」が出力されるウィンドウの名称を答えよ。",
+    "answers": [
+      "イミディエイトウィンドウ",
+      "Immediate Window"
+    ],
+    "explanation": "Debug.Printで出力されるのはイミディエイトウィンドウ（Immediate Window）です。変数の値を確認したり、簡単なコードを試したりするのに便利なデバッグ用のウィンドウです。"
+  },
+  {
+    "type": "simple",
+    "question": "「ExcelのVBAにおいて、無限ループが生じたときは(  )の押下のキー操作によって中断することができる。」括弧にあてはまる語を答えよ。",
+    "answers": [
+      "ESC",
+      "Escape",
+      "Ctrl+Break"
+    ],
+    "explanation": "ExcelのVBAにおいて、無限ループが生じたときは「ESC」キーまたは「Ctrl+Break」キーの押下によって中断することができます。これは、実行中のマクロを強制的に停止するための一般的な方法です。"
+  }
+]

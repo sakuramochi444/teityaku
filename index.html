@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確認テスト テンプレート</title>
+    <!-- Tailwind CSSの読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter & Noto Sans JP) の読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://css.gg/css?=|arrow-left|check|close" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Noto Sans JP', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { display: none; }
+        .disabled-options label { cursor: not-allowed; background-color: #f9fafb; opacity: 0.7; }
+        .correct-answer { border-color: #22c55e !important; background-color: #f0fdf4; }
+        .incorrect-answer { border-color: #ef4444 !important; background-color: #fef2f2; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div id="app-container" class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
+        <!-- テスト選択画面 -->
+        <div id="selection-screen">
+            <header class="mb-8 text-center">
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">テスト選択</h1>
+                <p class="text-gray-600 mt-2">挑戦するテストを選んでください。</p>
+            </header>
+            <div id="selection-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+        <!-- テスト本体画面 -->
+        <div id="quiz-screen" class="hidden">
+            <header class="mb-8 text-center relative">
+                <button id="back-to-selection-btn" class="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-200 transition">
+                    <i class="gg-arrow-left"></i>
+                </button>
+                <h1 id="quiz-title" class="text-3xl sm:text-4xl font-bold text-gray-900"></h1>
+                <p id="quiz-description" class="text-gray-600 mt-2"></p>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
+                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"></div>
+                </div>
+            </header>
+            <div id="single-question-container"></div>
+            <div id="navigation-container" class="mt-8 text-center"></div>
+        </div>
+
+        <!-- 最終結果画面 -->
+        <div id="final-result-screen" class="hidden"></div>
+    </div>
+
+    <script>
+        // --- グローバル変数 ---
+        let quizList = [], currentQuizData = [], currentQuizTitle = "";
+        let currentQuestionIndex = 0;
+        let sessionResults = [], incorrectQuestions = [];
+
+        // --- DOM要素 ---
+        const app = document.getElementById('app-container');
+        const selectionScreen = document.getElementById('selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const finalResultScreen = document.getElementById('final-result-screen');
+        const selectionContainer = document.getElementById('selection-container');
+        const singleQuestionContainer = document.getElementById('single-question-container');
+        const navigationContainer = document.getElementById('navigation-container');
+        const backBtn = document.getElementById('back-to-selection-btn');
+        const quizTitle = document.getElementById('quiz-title');
+        const quizDescription = document.getElementById('quiz-description');
+        const progressBar = document.getElementById('progress-bar');
+        
+        // --- 初期化 ---
+        window.addEventListener('load', async () => {
+            try {
+                // 目次ファイルを読み込む
+                const response = await fetch('./quiz-list.json');
+                if (!response.ok) throw new Error('quiz-list.jsonが見つかりません。');
+                const manifest = await response.json();
+                quizList = manifest.quizzes;
+                initSelectionScreen();
+            } catch (error) {
+                console.error("初期化エラー:", error);
+                app.innerHTML = `<p class="text-red-500 text-center">エラー: quiz-list.json の読み込みに失敗しました。</p>`;
+            }
+        });
+
+        // --- 画面遷移管理 ---
+        function showScreen(screenToShow) {
+            selectionScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            finalResultScreen.classList.add('hidden');
+            screenToShow.classList.remove('hidden');
+            screenToShow.classList.add('fade-in');
+        }
+
+        // --- テスト選択 ---
+        function initSelectionScreen() {
+            selectionContainer.innerHTML = '';
+            quizList.forEach((quizInfo, index) => {
+                const card = document.createElement('div');
+                card.className = 'fade-in bg-white p-6 rounded-xl shadow-md border hover:shadow-lg hover:border-blue-400 transition-all cursor-pointer flex flex-col justify-between';
+                card.style.animationDelay = `${index * 100}ms`;
+                card.innerHTML = `<div><h2 class="text-xl font-bold text-gray-800">${quizInfo.title}</h2></div><button class="mt-4 bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 self-start">テスト開始</button>`;
+                card.addEventListener('click', () => loadQuizAndStart(quizInfo));
+                selectionContainer.appendChild(card);
+            });
+            showScreen(selectionScreen);
+        }
+        
+        // --- テストデータを読み込んで開始 ---
+        async function loadQuizAndStart(quizInfo) {
+            try {
+                const response = await fetch(quizInfo.filePath);
+                if (!response.ok) throw new Error(`ファイル「${quizInfo.filePath}」が見つかりません。`);
+                const questions = await response.json();
+                startQuiz(quizInfo.title, questions);
+            } catch (error) {
+                alert(`テスト「${quizInfo.title}」の読み込みに失敗しました。`);
+                console.error("テストデータの読み込みエラー:", error);
+            }
+        }
+
+        // --- テスト開始/再挑戦 ---
+        function startQuiz(title, questions, isRetry = false) {
+            currentQuestionIndex = 0;
+            sessionResults = [];
+            currentQuizTitle = title;
+            currentQuizData = questions;
+            
+            quizTitle.textContent = isRetry ? `${currentQuizTitle} (再挑戦)` : currentQuizTitle;
+            quizDescription.textContent = isRetry 
+                ? '間違えた問題にもう一度挑戦しましょう！' 
+                : '学習の成果を確認しましょう。';
+            
+            showScreen(quizScreen);
+            displayCurrentQuestion();
+        }
+        
+        backBtn.addEventListener('click', initSelectionScreen);
+
+        // --- 問題表示 ---
+        function displayCurrentQuestion() {
+            navigationContainer.innerHTML = '';
+            const data = currentQuizData[currentQuestionIndex];
+            progressBar.style.width = `${((currentQuestionIndex) / currentQuizData.length) * 100}%`;
+            let questionHeaderHTML = `<p class="font-bold text-lg text-gray-800">${data.question}</p>`;
+            let qBodyHTML = '';
+            switch (data.type) {
+                case 'simple': qBodyHTML = `<input type="text" id="user-answer" class="w-full sm:w-2/3 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400">`; break;
+                case 'single-choice': qBodyHTML = `<div id="user-answer" class="space-y-2">${data.options.map((opt, i) => `<label class="flex items-center p-3 rounded-lg hover:bg-gray-50 border cursor-pointer"><input type="radio" name="option" value="${i}" class="h-5 w-5 text-blue-600"><span class="ml-3 text-gray-700">${opt}</span></label>`).join('')}</div>`; break;
+                case 'multiple-choice': qBodyHTML = `<div id="user-answer" class="space-y-2">${data.options.map((opt, i) => `<label class="flex items-center p-3 rounded-lg hover:bg-gray-50 border cursor-pointer"><input type="checkbox" name="option" value="${i}" class="h-5 w-5 text-blue-600 rounded"><span class="ml-3 text-gray-700">${opt}</span></label>`).join('')}</div>`; break;
+                case 'fill-in-blank': const parts = data.question.split('[___]'); questionHeaderHTML = `<p class="font-bold text-lg text-gray-800 flex flex-wrap items-center leading-loose">${parts.map((part, i) => `<span>${part}</span>${i < parts.length - 1 ? `<input type="text" name="blank-${i}" class="inline-block w-32 sm:w-40 mx-1 p-1 border-b-2 border-gray-300 bg-gray-50 text-center">` : ''}`).join('')}</p>`; qBodyHTML = ''; break;
+                case 'essay': qBodyHTML = `<textarea id="user-answer" rows="5" class="w-full p-3 border border-gray-300 rounded-md" placeholder="ここに回答を入力"></textarea>`; break;
+                case 'sub-questions-choice': qBodyHTML = `<div id="user-answer" class="space-y-6">${data.sub_questions.map((subQ, subIndex) => `<div class="pl-4 border-l-2"><p class="font-semibold text-gray-800 mb-2">${subQ.text}</p><div class="space-y-2">${subQ.options.map((opt, i) => `<label class="flex items-center p-3 rounded-lg hover:bg-gray-50 border cursor-pointer"><input type="radio" name="sub-option-${subIndex}" value="${i}" class="h-5 w-5 text-blue-600"><span class="ml-3 text-gray-700">${opt}</span></label>`).join('')}</div></div>`).join('')}</div>`; break;
+            }
+            singleQuestionContainer.innerHTML = `<div class="bg-white p-6 rounded-xl shadow-md border fade-in"><div class="flex items-start"><div class="flex-shrink-0 bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-xl mr-4">${currentQuestionIndex + 1}</div><div class="flex-grow">${questionHeaderHTML}${data.image ? `<div class="my-4"><img src="${data.image}" alt="問題画像" class="max-w-full h-auto mx-auto rounded-lg shadow-sm border" onerror="this.style.display='none'"></div>` : ''}${qBodyHTML ? `<div class="mt-4" id="q-body-container">${qBodyHTML}</div>` : ''}</div></div></div>`;
+            navigationContainer.innerHTML = `<button id="submit-answer-btn" class="bg-blue-600 text-white font-bold py-3 px-12 rounded-lg hover:bg-blue-700">回答を提出</button>`;
+            document.getElementById('submit-answer-btn').addEventListener('click', handleSubmitAnswer);
+        }
+
+        // --- 回答提出・採点 ---
+        function handleSubmitAnswer() {
+            const data = currentQuizData[currentQuestionIndex];
+            let isCorrect = false; let resultHTML = '';
+            switch (data.type) {
+                case 'simple': isCorrect = data.answers.map(a=>a.toLowerCase()).includes(document.getElementById('user-answer').value.trim().toLowerCase()); resultHTML = `正解: ${data.answers[0]}`; break;
+                case 'single-choice': const radio = document.querySelector('input[name="option"]:checked'); isCorrect = radio ? parseInt(radio.value) === data.answer : false; resultHTML = `正解: ${data.options[data.answer]}`; break;
+                case 'multiple-choice': const checkboxes = document.querySelectorAll('input[name="option"]:checked'); const userAnswers = Array.from(checkboxes).map(cb => parseInt(cb.value)).sort(); const correctAnswers = [...data.answer].sort(); isCorrect = JSON.stringify(userAnswers) === JSON.stringify(correctAnswers); resultHTML = `正解: ${data.answer.map(i=>data.options[i]).join(', ')}`; break;
+                case 'fill-in-blank': let allCorrect = true; data.answers.forEach((ans, i)=>{const input=document.querySelector(`input[name="blank-${i}"]`); if(!input||input.value.trim().toLowerCase()!==ans.toLowerCase()) allCorrect=false;}); isCorrect=allCorrect; resultHTML=`正解: ${data.answers.join(', ')}`; break;
+                case 'essay': isCorrect = null; resultHTML = `<p class="font-semibold">模範解答:</p><p class="mt-1 p-3 bg-blue-50 rounded-md border">${data.exampleAnswer}</p>`; break;
+                case 'sub-questions-choice': { let subScore = 0; let subQuestionResultsHTML = '<div class="space-y-4 mt-4">'; data.sub_questions.forEach((subQ, i) => { const subRadio = document.querySelector(`input[name="sub-option-${i}"]:checked`); const subIsCorrect = subRadio && parseInt(subRadio.value) === subQ.answer; if (subIsCorrect) subScore++; const userAnswerText = subRadio ? subQ.options[subRadio.value] : '（未選択）'; subQuestionResultsHTML += `<div class="pl-4 border-l-2 ${subIsCorrect ? 'border-green-500' : 'border-red-500'}"><p class="font-semibold text-gray-800">${subQ.text}</p><p class="text-sm mt-1">あなたの回答: ${userAnswerText}</p><p class="text-sm mt-1 font-bold ${subIsCorrect ? 'text-green-700' : 'text-red-700'}">正解: ${subQ.options[subQ.answer]}</p>${subQ.explanation ? `<p class="text-sm mt-1 text-gray-500">解説: ${subQ.explanation}</p>` : ''}</div>`; }); subQuestionResultsHTML += '</div>'; isCorrect = subScore === data.sub_questions.length; resultHTML = `<p class="font-bold">あなたの得点: ${subScore} / ${data.sub_questions.length}</p>${subQuestionResultsHTML}`; break; }
+            }
+            sessionResults.push({ question: data, isCorrect: isCorrect });
+            const resultBox = document.createElement('div'); resultBox.className = 'mt-6 p-4 rounded-lg fade-in';
+            if (isCorrect === null) { resultBox.innerHTML = resultHTML; navigationContainer.innerHTML = `<p class="mb-4 font-semibold">あなたの回答は模範解答と比べてどうでしたか？</p><div class="flex justify-center gap-4"><button id="self-grade-correct" class="bg-green-500 text-white font-bold py-2 px-6 rounded-lg">正解だった</button><button id="self-grade-incorrect" class="bg-red-500 text-white font-bold py-2 px-6 rounded-lg">不正解だった</button></div>`; document.getElementById('self-grade-correct').addEventListener('click', () => handleSelfGrade(true)); document.getElementById('self-grade-incorrect').addEventListener('click', () => handleSelfGrade(false));
+            } else {
+                 resultBox.innerHTML = `<div class="flex items-center font-bold text-lg mb-2"><i class="gg-${isCorrect ? 'check text-green-500' : 'close text-red-500'} mr-2"></i><span>${isCorrect ? '正解！' : '不正解'}</span></div><div class="ml-8 font-semibold text-gray-700">${resultHTML}</div>${(data.explanation && data.type !== 'sub-questions-choice') ? `<p class="ml-8 mt-2 text-sm text-gray-600">解説: ${data.explanation}</p>` : ''}`;
+                resultBox.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50'); showNextQuestionButton();
+            }
+            singleQuestionContainer.appendChild(resultBox);
+            document.querySelectorAll('input, textarea').forEach(el => el.disabled = true);
+            singleQuestionContainer.querySelector('div[id^=user-answer]')?.classList.add('disabled-options');
+        }
+
+        function handleSelfGrade(wasCorrect) { sessionResults[sessionResults.length - 1].isCorrect = wasCorrect; showNextQuestionButton(); }
+        function showNextQuestionButton() { const isLastQuestion = currentQuestionIndex === currentQuizData.length - 1; navigationContainer.innerHTML = `<button id="next-q-btn" class="bg-gray-700 text-white font-bold py-3 px-12 rounded-lg hover:bg-gray-800">${isLastQuestion ? '最終結果を見る' : '次の問題へ'}</button>`; document.getElementById('next-q-btn').addEventListener('click', isLastQuestion ? displayFinalResults : () => { currentQuestionIndex++; displayCurrentQuestion(); }); }
+
+        // --- 最終結果 ---
+        function displayFinalResults() {
+            progressBar.style.width = '100%';
+            const score = sessionResults.filter(r => r.isCorrect).length; const total = sessionResults.length;
+            const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+            let scoreMessage = percentage===100?'素晴らしい！全問正解です！🎉':percentage>=80?'優秀です！あと一歩！':percentage>=60?'よくできました！':'お疲れ様でした。再挑戦しましょう！';
+            incorrectQuestions = sessionResults.filter(r => !r.isCorrect).map(r => r.question);
+            finalResultScreen.innerHTML = `<div class="text-center bg-white p-8 rounded-xl shadow-lg fade-in"><h2 class="text-2xl font-bold text-gray-800 mb-2">テスト完了！</h2><p class="text-gray-600">総合スコア</p><p class="text-6xl font-bold my-4 text-blue-600">${score} / ${total}</p><p class="text-3xl font-semibold text-gray-700">${percentage}%</p><p class="mt-4 text-lg">${scoreMessage}</p><div class="mt-8 flex flex-col sm:flex-row justify-center gap-4"><button id="return-to-selection-final" class="bg-gray-600 text-white font-bold py-3 px-8 rounded-lg hover:bg-gray-700">テスト一覧に戻る</button>${incorrectQuestions.length > 0 ? `<button id="retry-incorrect-btn" class="bg-yellow-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-yellow-600">間違えた問題だけ解きなおす (${incorrectQuestions.length}問)</button>` : ''}</div></div>`;
+            showScreen(finalResultScreen);
+            document.getElementById('return-to-selection-final').addEventListener('click', initSelectionScreen);
+            if(incorrectQuestions.length > 0) { document.getElementById('retry-incorrect-btn').addEventListener('click', () => startQuiz(currentQuizTitle, incorrectQuestions, true)); }
+        }
+    </script>
+
+</body>
+</html>
