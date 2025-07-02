@@ -172,6 +172,30 @@
                 case 'fill-in-blank': let allCorrect = true; data.answers.forEach((ans, i)=>{const input=document.querySelector(`input[name="blank-${i}"]`); if(!input||input.value.trim().toLowerCase()!==ans.toLowerCase()) allCorrect=false;}); isCorrect=allCorrect; resultHTML=`正解: ${data.answers.join(', ')}`; break;
                 case 'essay': isCorrect = null; resultHTML = `<p class="font-semibold">模範解答:</p><p class="mt-1 p-3 bg-blue-50 rounded-md border">${data.exampleAnswer}</p>`; break;
                 case 'sub-questions-choice': { let subScore = 0; let subQuestionResultsHTML = '<div class="space-y-4 mt-4">'; data.sub_questions.forEach((subQ, i) => { const subRadio = document.querySelector(`input[name="sub-option-${i}"]:checked`); const subIsCorrect = subRadio && parseInt(subRadio.value) === subQ.answer; if (subIsCorrect) subScore++; const userAnswerText = subRadio ? subQ.options[subRadio.value] : '（未選択）'; subQuestionResultsHTML += `<div class="pl-4 border-l-2 ${subIsCorrect ? 'border-green-500' : 'border-red-500'}"><p class="font-semibold text-gray-800">${subQ.text}</p><p class="text-sm mt-1">あなたの回答: ${userAnswerText}</p><p class="text-sm mt-1 font-bold ${subIsCorrect ? 'text-green-700' : 'text-red-700'}">正解: ${subQ.options[subQ.answer]}</p>${subQ.explanation ? `<p class="text-sm mt-1 text-gray-500">解説: ${subQ.explanation}</p>` : ''}</div>`; }); subQuestionResultsHTML += '</div>'; isCorrect = subScore === data.sub_questions.length; resultHTML = `<p class="font-bold">あなたの得点: ${subScore} / ${data.sub_questions.length}</p>${subQuestionResultsHTML}`; break; }
+                case 'descriptive': {
+                    const userAnswerTexts = [];
+                    if (data.fields_count && data.fields_count > 1) {
+                        document.querySelectorAll('input[name="user-answer-field"]').forEach(input => {
+                            if(input.value.trim() !== '') userAnswerTexts.push(input.value);
+                        });
+                    } else {
+                        const textarea = document.getElementById('user-answer');
+                        if (textarea && textarea.value.trim() !== '') userAnswerTexts.push(textarea.value);
+                    }
+                    
+                    const combinedUserAnswer = userAnswerTexts.join(' ').toLowerCase();
+                    const satisfiedGroups = new Set();
+                    if(combinedUserAnswer !== '') {
+                        data.answer_groups.forEach((group, groupIndex) => {
+                            if (group.some(keyword => combinedUserAnswer.includes(keyword.toLowerCase()))) {
+                                satisfiedGroups.add(groupIndex);
+                            }
+                        });
+                    }
+                    isCorrect = satisfiedGroups.size >= data.required_groups;
+                    resultHTML = `解答のポイント: ${data.answer_groups.map(g => g.join('/')).join('、')}`;
+                    break;
+                }
             }
             sessionResults.push({ question: data, isCorrect: isCorrect });
             const resultBox = document.createElement('div'); resultBox.className = 'mt-6 p-4 rounded-lg fade-in';
