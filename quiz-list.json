@@ -1,6 +1,46 @@
 {
   "quizzes": [
     {
+      "id": "quiz1",
+      "title": "定着確認1",
+      "filePath": "./data/quiz01.json"
+    },
+    {
+      "id": "quiz2",
+      "title": "定着確認2",
+      "filePath": "./data/quiz02.json"
+    },
+    {
+      "id": "quiz3",
+      "title": "定着確認3",
+      "filePath": "./data/quiz03.json"
+    },
+    {
+      "id": "quiz4",
+      "title": "定着確認4",
+      "filePath": "./data/quiz04.json"
+    },
+    {
+      "id": "quiz5",
+      "title": "定着確認5",
+      "filePath": "./data/quiz05.json"
+    },
+    {
+      "id": "quiz6",
+      "title": "定着確認6",
+      "filePath": "./data/quiz06.json"
+    },
+    {
+      "id": "quiz7",
+      "title": "定着確認7",
+      "filePath": "./data/quiz07.json"
+    },
+    {
+      "id": "quiz8",
+      "title": "定着確認8",
+      "filePath": "./data/quiz08.json"
+    },
+    {
       "id": "quiz9",
       "title": "定着確認9",
       "filePath": "./data/quiz09.json"
