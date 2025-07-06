@@ -288,7 +288,7 @@
   {
     "question": "次に示すCSSコードにおいて、「セレクタ」の具体的な値は何か答えよ。同様に「プロパティ」、「値」についても答えよ。",
     "type": "descriptive",
-    "picture": "./images/11-28.png",
+    "image": "./images/11-28.png",
     "fields_count": 3,
     "answer_groups": [
       ["h1"],
