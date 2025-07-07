@@ -1,0 +1,48 @@
+[
+  {
+    "type": "single-choice",
+    "question": "ウェブページに美しく整形された数式を表示するための技術は、どれか。最も適切なものを答えよ。",
+    "options": [
+      "Wolfalpha",
+      "Mathematica",
+      "MathJax",
+      "LaTeX",
+      "jQuery",
+      "React"
+    ],
+    "answer": 2,
+    "explanation": "MathJaxは、ウェブページ上で美しく整形された数式を表示するためのJavaScriptライブラリです。LaTeXの数式をHTMLに変換して表示することができます。"
+  },
+  {
+    "type": "single-choice",
+    "question": "HTMLに関する文脈でCDNとは何の略か。最も適切なものを記号で答えよ。",
+    "options": [
+      "Content Distribution Network",
+      "Central Data Network",
+      "Cool Developer's Network",
+      "Content Delivery Network",
+      "Chocolate Donut Network"
+    ],
+    "answer": 3,
+    "explanation": "CDNはContent Delivery Networkの略で、ウェブコンテンツを効率的に配信するためのネットワークです。CDNを利用することで、ウェブサイトのパフォーマンスが向上します。"
+  },
+  {
+    "type": "fill-in-blank",
+    "question": "ア： [___] ,イ： [___] , ウ： [___] , エ： [___] ,オ： [___] ,カ： [___] ,キ： [___] ,ク： [___] ,ケ： [___] ,コ： [___] ,サ： [___] ,シ： [___]",
+    "image": "./images/12-3.png",
+    "answers": [
+      "2",
+      "2",
+      "2",
+      "3",
+      "5",
+      "①",
+      "1",
+      "1",
+      "4",
+      "2",
+      "0"
+    ],
+    "explanation": "大学入学共通テスト（＝皆さんと同学年の高校3年生が受験することになる試験）の「情報」から第三問です。"
+  }
+]
