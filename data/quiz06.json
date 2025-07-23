@@ -1,10 +1,145 @@
 [
   {
+    "type": "single-choice",
+    "question": "日本において1990年代まで広く使われていたワープロソフトの名称はどれか。最も適切なものを答えよ。",
+    "options": [
+      "新太郎",
+      "進次郎",
+      "一太郎",
+      "ATOK",
+      "花子",
+      "松",
+      "桐"
+    ],
+    "answer": 2,
+    "explanation": "1990年代の日本で広く使われていた代表的なワープロソフトは、株式会社ジャストシステムが開発・販売していた**一太郎**です。ATOKは一太郎にバンドルされていた日本語入力システムであり、花子はグラフィックソフト、松と桐はそれぞれ表計算やデータベースソフトの名前として知られています。新太郎や進次郎はソフトウェアの名称としては一般的ではありません。"
+  },
+  {
+    "type": "multiple-choice",
+    "question": "次に示すもののうちIME（Input Method Editor）に該当しないものはどれか。該当するものすべてを記号で答えよ。",
+    "options": [
+      "Google日本語入力",
+      "ATOK",
+      "Microsoft IME",
+      "Cortana",
+      "Claude3"
+    ],
+    "answer": [
+      3,
+      4
+    ],
+    "explanation": "IME（Input Method Editor）は、主に日本語などの多言語入力を支援するソフトウェアです。Google日本語入力、ATOK、Microsoft IMEはすべてIMEに該当します。一方、CortanaはMicrosoftの音声アシスタントであり、Claude3はAIモデルであり、どちらもIMEではありません。したがって、正しい答えはCortanaとClaude3です。"
+  },
+  {
   "type": "simple",
-  "question": "Coming soon?",
+  "question": "日本語入力／変換の文脈でIMEとは何の略語か英語で答えよ。",
   "answers": [
-    "Yes"
+    "Input Method Editor"
   ],
-  "explanation": "This quiz is under development and will be available soon. Please check back later for updates."
+  "explanation": "IMEは「Input Method Editor」の略で、日本語などの多言語入力を支援するソフトウェアです。IMEを使用することで、キーボードからの入力を効率的に日本語や他の言語に変換することができます。"
+  },
+  {
+  "type": "simple",
+  "question": "WYSIWYGの一般的な「読み」をカタカナ6文字で答えよ。",
+  "answers": [
+    "ウィジウィグ"
+  ],
+  "explanation": "WYSIWYGは「What You See Is What You Get」の略で、カタカナでは「ウィジウィグ」と表記されます。この概念は、編集画面で見た通りのレイアウトや内容が、最終的な出力（印刷物やウェブページなど）でも同様に表示されることを意味します。"
+  },
+  {
+    "type": "single-choice",
+    "question": "WYSIWYGは何の頭文字をとった略語か。最も適切なものを答えよ。",
+    "options": [
+      "What You See Is What You Get",
+      "Why You See Is Why You Go",
+      "What You Seek Is What You Get",
+      "What You See Is Where You Go"
+    ],
+    "answer": 0,
+    "explanation": "WYSIWYG（ウィジウィグ）は、「**What You See Is What You Get**」の頭文字をとった略語です。これは、コンピュータの画面上で表示されているものが、印刷物や最終的な出力とほぼ同じ形式で得られる（表示と出力が一致する）ことを意味します。ワープロソフトやDTP（デスクトップパブリッシング）ソフトウェアなどでよく使われる概念です。"
+  },
+  {
+  "type": "simple",
+  "question": "LaTeXの一般的な「読み」を答えよ（ただし、ラテックを除く）。",
+  "answers": [
+    "ラテフ"
+  ],
+  "explanation": "LaTeXは「ラテフ」と読みます。これは、TeXという組版システムの上に構築された文書作成システムで、特に数式や科学技術文書の作成に適しています。LaTeXは、文書の構造を明確にし、スタイルを一貫して適用することができるため、学術論文や技術文書の作成に広く利用されています。"
+  },
+  {
+    "type": "single-choice",
+    "question": "次のソフトウェアのうちWYSIWYGに非対応なものはどれか。最も適切なものを答えよ。",
+    "options": [
+      "Microsoft Word",
+      "Googleドキュメント",
+      "LaTeX",
+      "Adobe InDesign"
+    ],
+    "answer": 2,
+    "explanation": "WYSIWYG（What You See Is What You Get）は、画面に表示される内容が最終的な出力結果とほぼ同じになることを指します。Microsoft Word、Googleドキュメント、Adobe InDesignは、この原則に基づいて文書作成ができます。しかし、**LaTeX**はマークアップ言語を用いて文書構造を記述し、それをコンパイルして出力（通常はPDF）を生成するため、記述時と出力時で見た目が大きく異なり、WYSIWYGには非対応です。"
+  },
+  {
+    "type": "single-choice",
+    "question": "次のうちウェブでの学術的な文書や教育コンテンツの公開において、LaTeX形式での数式記述を可能にするJavaScriptライブラリはどれか。最も適切なものを答えよ。",
+    "options": [
+      "jQuery",
+      "ReactJS",
+      "MathML",
+      "MathJax",
+      "Mathematica",
+      "Wolfram"
+    ],
+    "answer": 3,
+    "explanation": "ウェブ上でLaTeX形式の数式を美しく表示するための主要なJavaScriptライブラリは**MathJax**です。MathJaxは、Webブラウザ上で数式をレンダリングし、学術論文や教育コンテンツでの利用を容易にします。jQueryやReactJSは一般的なWeb開発ライブラリ、MathMLは数式記述言語、MathematicaやWolframは数式処理システムであり、JavaScriptライブラリではありません。"
+  },
+  {
+    "type": "single-choice",
+    "question": "文章作成の文脈において「字下げ」を意味する語はどれか。最も適切なものを記号で答えよ。",
+    "options": [
+      "タブ",
+      "インデント",
+      "アウトライン",
+      "アンダースコア",
+      "ハイフネーション"
+    ],
+    "answer": 1,
+    "explanation": "文章作成において「字下げ」とは、段落の行頭を一定の量だけ内側に寄せることを指し、これは**インデント（Indent）** と呼ばれます。インデントは、引用文やリストなど、文書の構造を視覚的に明確にするために使われます。タブは文字揃えのための機能、アウトラインは文書の階層構造、アンダースコアは下線、ハイフネーションは単語の分割を意味します。"
+  },
+  {
+    "type": "single-choice",
+    "question": "指導教員からWordの「変更履歴」の機能を使って報告書の添削を受けた。添削前の報告書を表示したい場合、変更履歴の「変更内容の表示」からどのモードを選ぶべきか。最も適切なものを記号で答えよ。",
+    "options": [
+      "シンプルな変更履歴／コメント",
+      "すべての変更履歴／コメント",
+      "変更履歴／コメントなし",
+      "初版"
+    ],
+    "answer": 3,
+    "explanation": "Microsoft Wordの「変更履歴」機能で、添削前の元の文書を表示したい場合は、「変更内容の表示」オプションから「**初版**」を選択します。これにより、すべての変更が適用されていない、最初に記録されたバージョンの文書が表示されます。他のオプションは、変更内容の表示方法を変更するものであり、元の状態に戻すものではありません。"
+  },
+  {
+    "type": "single-choice",
+    "question": "指導教員からWordの「変更履歴」の機能を使って報告書の添削を受けた。添削後の報告書（教員による添削を完全に反映した報告書）を表示したい場合、変更履歴の「変更内容の表示」からどのモードを選ぶべきか。ただし、添削を受けた部分は把握したいものとする。最も適切なものを記号で答えよ。",
+    "options": [
+      "シンプルな変更履歴／コメント",
+      "すべての変更履歴／コメント",
+      "変更履歴／コメントなし",
+      "初版"
+    ],
+    "answer": 0,
+    "explanation": "Microsoft Wordの「変更履歴」機能で、教員による添削が完全に反映された状態の文書を見たいが、どこが変更されたか（添削された部分）も把握したい場合、最も適切なのは「**シンプルな変更履歴／コメント**」モードです。このモードでは、変更内容が簡潔に表示され、文書がほぼ最終形に近い状態で確認できますが、変更箇所がマーク（通常はサイドバーの吹き出しや変更バー）で示されるため、どこが修正されたかを一目で把握できます。'すべての変更履歴／コメント'は詳細すぎる場合があり、'変更履歴／コメントなし'は変更箇所が分からなくなり、'初版'は添削前の状態に戻ります。"
+  },
+  {
+    "type": "fill-in-blank",
+    "question": "問１【コ】 [___] 、【サシ】 [___] 、【スセ】 [___] 問２  [___] 問３  [___] ",
+    "image": "./images/6-1.png",
+    "answers": [
+      "5",
+      "12",
+      "18",
+      "1",
+      "2"
+    ],
+    "explanation": "大学入学共通テスト（＝皆さんと同学年の高校3年生が受験することになる試験）の「情報」から第2問 Bです。"
   }
 ]
