@@ -54,6 +54,11 @@
       "id": "quiz12",
       "title": "定着確認12",
       "filePath": "./data/quiz12.json"
+    },
+    {
+      "id": "quiz14",
+      "title": "定着確認14",
+      "filePath": "./data/quiz14.json"
     }
   ]
 }
